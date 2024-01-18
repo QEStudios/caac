@@ -1,12 +1,14 @@
 import os
 os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
-import pygame
+import winsound
 import time
 import random
+import urllib.request
+import shutil
 
-def play_audio(file_path):
-    pygame.mixer.init()
-    pygame.mixer.Channel(0).play(pygame.mixer.Sound(file_path))
+def play_audio(url):
+    filepath, _ = urllib.request.urlretrieve(url)
+    winsound.PlaySound(filepath, winsound.SND_FILENAME | winsound.SND_ASYNC)
 
 def print_text_at_time(text, seconds, colour=None):
     time.sleep(max(0, start - time.time() + seconds))
@@ -20,7 +22,7 @@ def generate_char_block():
     return "\n" + block
 
 if __name__ == "__main__":
-    audio_file_path = "caac.mp3"  # Replace with the path to your audio file
+    audio_file_url = "https://github.com/QEStudios/caac/raw/main/caac.wav"
     terminal_width = 120
     os.system("color 0f")
     os.system("cls")
@@ -253,7 +255,7 @@ if __name__ == "__main__":
         (48.22, " night"),
     ]
 
-    play_audio(audio_file_path)
+    play_audio(audio_file_url)
     start = time.time()
 
     for timing in text_timings:
@@ -262,6 +264,4 @@ if __name__ == "__main__":
         else:
             print_text_at_time(timing[1], timing[0])
 
-    # Wait for the audio to finish playing
-    while pygame.mixer.Channel(0).get_busy() == True:
-        time.sleep(1)
+    time.sleep(1)
